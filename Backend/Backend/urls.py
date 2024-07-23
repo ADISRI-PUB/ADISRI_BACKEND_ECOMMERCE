@@ -23,9 +23,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     #ADDING PATH OF APP URLS
-    path('products/',include('Products.urls')),
-    path('careers/',include('Careers.urls')),
-    path('order/',include('Order.urls')),
-    path('api/auth/', include('OAuth.urls')),
+    path('data/products/',include('Products.urls')),
+    path('data/careers/',include('Careers.urls')),
+    path('data/order/',include('Order.urls')),
+    path('data/api/auth/', include('OAuth.urls')),
 
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
