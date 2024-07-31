@@ -19,7 +19,6 @@ class Order(models.Model):
 
 
 class Order_Items(models.Model):
-    product=models.ManyToManyField(Product)
     order=models.ForeignKey(Order,on_delete=models.SET_NULL, null=True)
     OrderItems_id =  models.AutoField(primary_key=True)
     Order_Items_Data = models.JSONField(null=True, blank=True,default=dict)

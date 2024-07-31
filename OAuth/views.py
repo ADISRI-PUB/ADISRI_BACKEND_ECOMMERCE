@@ -1,36 +1,51 @@
-from django.shortcuts import render
-from rest_framework.decorators import APIView
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from django.contrib.auth.models import User
+from .serializers import UserSerializerWithToken,MyTokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from  django.contrib.auth.models import User
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
+from rest_framework import status
 from django.contrib.auth.hashers import make_password
 
 
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer): 
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        print(data)
+        # Add custom claims to the response data
+        serializer =UserSerializerWithToken(self.user).data
+        for k,v in serializer.items():
+            data[k]= v
+        return data
 
-class RegisterNewUser(APIView):
-    
-    def post(self,request):
-        username = request.data.get("username")
-        email = request.data.get("email")
-        name = request.data.get("name")
-        
-        try:
-            user  = User.objects.create_user(
-                username = username,
-                password = "random12345server@chatapp12345@passtestnet!@*",
-                email = email,
-                first_name = name,
-            )
-            user.save()
-            print("{} created successfully".format(user.username))
-            return Response({"message":"User created"})
-        except:
-            return Response({"message":"User creation failed or user already exists"})
 
-class greeting(APIView):
-    permission_classes = ( IsAuthenticated, )
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
-    def get(self,request):
-        content = {'message': 'Hello, {}!'.format(request.user.first_name)}
-        return Response(content)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserProfile(request):
+    user =request.user
+    serializer=UserSerializer(user)
+    return Response(serializer.data)
+
+
+
+@api_view(['POST'])
+def registerUser(request):
+    data = request.data
+    k=User.objects.filter(first_name=data['name'])
+    if(len(k)== 1):
+        return Response("User with this email already exists")
+
+    else:
+        user =User.objects.create(
+        first_name=data['name'],
+        username=data['email'],
+        email=data['email'],
+        password=make_password(data['password']))
+        serializer=UserSerializerWithToken(user,many=False)
+        return Response(serializer.data)

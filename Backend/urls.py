@@ -26,6 +26,6 @@ urlpatterns = [
     path('data/products/',include('Products.urls')),
     path('data/careers/',include('Careers.urls')),
     path('data/order/',include('Order.urls')),
-    path('data/api/auth/', include('OAuth.urls')),
+    path('data/auth/', include('OAuth.urls')),
 
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
