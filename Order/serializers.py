@@ -10,30 +10,30 @@ class Shipping_Address_Serializer(serializers.ModelSerializer):
         model = Shipping_Address
         fields='__all__'
 
+
 class Order_Item_Serializer(serializers.ModelSerializer):
     class Meta:
         model= Order_Items  
         fields = '__all__'
 
 class Order_Serializer(serializers.ModelSerializer):
-    order_Items = serializers.SerializerMethodField(read_only=True)
-    shipping_address = serializers.SerializerMethodField(read_only=True)
-    #user = serializers.SerializerMethodField(read_only=True)
-
+    orderItems = serializers.SerializerMethodField(read_only=True)
+    shippingAddress = serializers.SerializerMethodField(read_only=True)
+    user = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = Order
-        fields = '__all__'
+        fields ='__all__'
 
-    def get_order_Items(self,obj):
-        items = obj.order_items_set.all()
-        serializer = Order_Item_Serializer(items,many=True) 
+    def get_orderItems(self,obj):
+        items=obj.orderitem_set.all()
+        serializer = Order_Item_Serializer(items,many=True)
         return serializer.data
 
-    def get_shipping_address(self, obj):
+    def get_shippingAddress(self,obj):
         try:
-            address = Shipping_Address_Serializer(obj.shipping_address, many=False).data
+            address = Shipping_Address_Serializer(obj.shippingaddress,many=False).data
         except:
-            address = None  # Handle the exception gracefully
+            address = False
         return address
 
     
