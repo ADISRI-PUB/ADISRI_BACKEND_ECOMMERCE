@@ -1,3 +1,4 @@
+
 #order models.py
 from django.db import models
 from django.contrib.auth.models import User
@@ -19,13 +20,16 @@ class Order(models.Model):
 
 
 class Order_Items(models.Model):
+    product=models.ForeignKey(Product,on_delete=models.SET_NULL, null=True)
     order=models.ForeignKey(Order,on_delete=models.SET_NULL, null=True)
-    OrderItems_id =  models.AutoField(primary_key=True)
-    Order_Items_Data = models.JSONField(null=True, blank=True,default=dict)
-    Total_Price=models.DecimalField(max_digits=7,decimal_places=2,null=True,blank=True)
+    Name=models.CharField(max_length=200,null=True, blank=True)
+    Qty=models.IntegerField(null=True, blank=True,default=0)
+    Price=models.DecimalField(max_digits=7,decimal_places=2,null=True,blank=True)
+    Image=models.CharField(max_length=200,null=True, blank=True)
+    OrderItem_id=models.AutoField(primary_key=True,editable=False)
 
-    def _str_(self):
-        return str(self.Total_Price)
+    def __str__(self):
+        return str(self.Name)
 
 
 class Shipping_Address(models.Model):
@@ -33,10 +37,13 @@ class Shipping_Address(models.Model):
     Address=models.CharField(max_length=200,null=True, blank=True)
     City=models.CharField(max_length=200,null=True, blank=True)
     PostalCode=models.CharField(max_length=200,null=True, blank=True)
-    Country=models.CharField(max_length=200,null=True, blank=True)
+    Phone_Number=models.IntegerField(null=True, blank=True)
+    School_name=models.CharField(max_length=200,null=True, blank=True)
     Shipping_Price=models.DecimalField(max_digits=7,decimal_places=2,null=True,blank=True)
     Shipping_Id=models.AutoField(primary_key=True,editable=False)
     Created_At = models.DateTimeField(auto_now_add=True)
 
     def _str_(self):
         return str(self.City)
+
+
