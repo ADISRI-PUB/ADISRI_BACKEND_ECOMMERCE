@@ -37,7 +37,7 @@ class Shipping_Address(models.Model):
     Address=models.CharField(max_length=200,null=True, blank=True)
     City=models.CharField(max_length=200,null=True, blank=True)
     PostalCode=models.CharField(max_length=200,null=True, blank=True)
-    Phone_Number=models.IntegerField(null=True, blank=True)
+    Phone_Number=models.CharField(max_length=10,null=True, blank=True)
     School_name=models.CharField(max_length=200,null=True, blank=True)
     Shipping_Price=models.DecimalField(max_digits=7,decimal_places=2,null=True,blank=True)
     Shipping_Id=models.AutoField(primary_key=True,editable=False)
