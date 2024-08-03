@@ -37,7 +37,6 @@ def addOrderItems(request):
                 Address=shipping_data.get('Address'),
                 City=shipping_data.get('City'),
                 PostalCode=shipping_data.get('PostalCode'),
-                Country=shipping_data.get('Country'),
                 Shipping_Price=shipping_data.get('Shipping_Price'),
             )
             for item_data in orderItems:
