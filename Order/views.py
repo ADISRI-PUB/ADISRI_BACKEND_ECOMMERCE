@@ -18,6 +18,8 @@ def addOrderItems(request):
     user = request.user
     data = request.data
     orderItems = data['orderItems']
+   
+   
 
     if orderItems and len(orderItems)==0:
         return Response({'details':'NO OrderItems'},status=status.HTTP_400_BAD_REQUEST)
@@ -25,49 +27,44 @@ def addOrderItems(request):
     try:    # Create a new order
             order = Order.objects.create(
                 user=user,
-                Tax_Price=data.get('Tax_Price'),
-                Shipping_Price=data.get('Shipping_Price'),
-                Total_Price=data.get('Total_Price'),
+                Tax_Price=data['TaxPrice'],
+                Shipping_Price=data['ShippingPrice'],
+                Total_Price=data['ToatalPrice']
             )
 
+           
+
             # Create Shipping Address
-            shipping_data = data.get('Shipping_Address', {})
             shipping = Shipping_Address.objects.create(
                 order=order,
-                Address=shipping_data.get('Address'),
-                City=shipping_data.get('City'),
-                PostalCode=shipping_data.get('PostalCode'),
-                Country=shipping_data.get('Country'),
-                Shipping_Price=shipping_data.get('Shipping_Price'),
+                Address=data['shippingAddress']['address'],
+                City=data['shippingAddress']['city'],
+                PostalCode=data['shippingAddress']['postalcode'],
+                Phone_Number=data['shippingAddress']['phone'],
+                School_name=data['shippingAddress']['school'],
+                Shipping_Price=data['ShippingPrice'],
             )
+           
             for item_data in orderItems:
-                product = Product.objects.get(_id=i['product'])
+                product = Product.objects.get(Product_Id=item_data['product'])
+                
                 item=Order_Items.objects.create(
                     product=product,
                     order=order,
-                    Name=product.name,
-                    Qty=i['qty'],
-                    Price=i['price'],
-                    Image=i['image'],
+                    Name=product.Name,
+                    Qty=item_data['qty'],
+                    Price=item_data['price'],
+                    Image=item_data['image'],
                 )
+            product.save()
+        
 
-            # Create Order Items and set order to orderitem relationship
-            # for item_data in orderItems:
-            #     # Create Order_Items instance
-            #     order_item = Order_Items.objects.create(
-            #         order=order,
-            #         Total_Price=item_data.get('Total_Price'),
-            #         Order_Items_Data=item_data.get('Order_Items_Data'),
-            #     )
-                
-            #     # Add products to Order_Items through ManyToMany relationship
-            #     products_data = item_data.get('products', [])  # Assuming 'products' is a list of product IDs
-            #     products = Product.objects.filter(id__in=products_data)
-            #     order_item.product.add(*products)  # Adding products to the ManyToManyField
-
-            # serializer = Order_Serializer(order)
+            serializer=Order_Serializer(order,many=False)
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    except ValidationError as e:
+        return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
