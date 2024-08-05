@@ -11,6 +11,10 @@ class Order(models.Model):
     Tax_Price=models.DecimalField(max_digits=7,decimal_places=2,null=True,blank=True)
     Shipping_Price=models.DecimalField(max_digits=7,decimal_places=2,null=True,blank=True)
     Total_Price=models.DecimalField(max_digits=7,decimal_places=2,null=True,blank=True)
+    status=models.BooleanField(default=False) # False for Active and True for Cancelled
+    is_placed=models.BooleanField(default=True)
+    is_processing=models.BooleanField(default=False)
+    is_shipping=models.BooleanField(default=False)
     Is_Delivered=models.BooleanField(default=False)
     Delivered_At=models.DateTimeField(auto_now_add=False,null=True,blank=True)
     CreateAt=models.DateTimeField(auto_now_add=True)
