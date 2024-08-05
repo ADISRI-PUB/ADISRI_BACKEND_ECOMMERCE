@@ -102,3 +102,19 @@ def orderall(request):
     except Exception as e:
         print(e)  # Log the exception for further debugging
         return Response({'detail': 'Error fetching orders'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['DELETE'])
+def delete_order(request,pk):
+    user = request.user
+    try:
+        order= Order.object.get(Order_Id=pk)
+        order.delete()
+        return Response(status =status.HTTP_204_NO_CONTENT)
+    except:
+        content = {'please move along': 'nothing to see here'}
+        return Response(content, status=status.HTTP_404_NOT_FOUND_)
+
+    
+
+    
