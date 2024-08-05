@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from datetime import datetime
 from .models import Order,Order_Items,Shipping_Address
-from .serializers import Shipping_Address_Serializer,Order_Item_Serializer,Order_Serializer
+from .serializers import Shipping_Address_Serializer,Order_Item_Serializer,Order_Serializer,Order_All_Serializer
 from Products.models  import Product
 from django.db import transaction
 from django.shortcuts import get_object_or_404
@@ -76,7 +76,7 @@ def getOrderById(request, pk):
     try:
         order = Order.objects.get(Order_Id=pk)
 
-        if user.is_staff or order.user == user:
+        if  order.user == user:
             serializer = Order_Serializer(order)
             return Response(serializer.data)
 
@@ -85,3 +85,20 @@ def getOrderById(request, pk):
 
     except Order.DoesNotExist:
         return Response({'detail': 'Order does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+@api_view(['GET'])
+def orderall(request):
+    user = request.user
+    try:
+        orders = Order.objects.filter(user_id=user.id)
+        serializer = Order_All_Serializer(orders,many=True)
+        if orders:
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
+    except Exception as e:
+        print(e)  # Log the exception for further debugging
+        return Response({'detail': 'Error fetching orders'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
