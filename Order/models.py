@@ -20,8 +20,8 @@ class Order(models.Model):
 
 
 class Order_Items(models.Model):
-    product=models.ForeignKey(Product,on_delete=models.SET_NULL, null=True)
-    order=models.ForeignKey(Order,on_delete=models.SET_NULL, null=True)
+    product=models.ForeignKey(Product,on_delete=models.CASCADE, null=True)
+    order=models.ForeignKey(Order,on_delete=models.CASCADE, null=True)
     Name=models.CharField(max_length=200,null=True, blank=True)
     Qty=models.IntegerField(null=True, blank=True,default=0)
     Price=models.DecimalField(max_digits=7,decimal_places=2,null=True,blank=True)
@@ -37,7 +37,7 @@ class Shipping_Address(models.Model):
     Address=models.CharField(max_length=200,null=True, blank=True)
     City=models.CharField(max_length=200,null=True, blank=True)
     PostalCode=models.CharField(max_length=200,null=True, blank=True)
-    Phone_Number=models.IntegerField(null=True, blank=True)
+    Phone_Number=models.CharField(max_length=10,null=True, blank=True)
     School_name=models.CharField(max_length=200,null=True, blank=True)
     Shipping_Price=models.DecimalField(max_digits=7,decimal_places=2,null=True,blank=True)
     Shipping_Id=models.AutoField(primary_key=True,editable=False)
