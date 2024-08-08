@@ -46,3 +46,7 @@ class Order_Serializer(serializers.ModelSerializer):
         serializer = UserSerializer(user,many=False)
         return serializer.data
     
+class Order_All_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields='__all__'
