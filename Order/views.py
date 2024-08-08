@@ -83,7 +83,7 @@ def getOrderById(request, pk):
             return Response(serializer.data)
 
         else:
-            return Response({'detail': 'Not authorized'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(serializer.errors,{'detail': 'Not authorized'}, status=status.HTTP_401_UNAUTHORIZED)
 
     except Order.DoesNotExist:
         return Response({'detail': 'Order does not exist'}, status=status.HTTP_404_NOT_FOUND)
@@ -104,3 +104,19 @@ def orderall(request):
     except Exception as e:
         print(e)  # Log the exception for further debugging
         return Response({'detail': 'Error fetching orders'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['DELETE'])
+def delete_order(request,pk):
+    user = request.user
+    try:
+        order= Order.objects.get(Order_Id=pk)
+        order.delete()
+        return Response(serializer.errors,status =status.HTTP_204_NO_CONTENT)
+    except:
+        content = {'please move along': 'nothing to see here'}
+        return Response(content, status=status.HTTP_404_NOT_FOUND)
+
+    
+
+    
