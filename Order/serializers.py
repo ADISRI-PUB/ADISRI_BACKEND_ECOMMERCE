@@ -46,7 +46,18 @@ class Order_Serializer(serializers.ModelSerializer):
         serializer = UserSerializer(user,many=False)
         return serializer.data
     
+
 class Order_All_Serializer(serializers.ModelSerializer):
+    orderItems = serializers.SerializerMethodField(read_only=True)
+    
     class Meta:
         model = Order
         fields='__all__'
+    
+    def get_orderItems(self,obj):
+        items=obj.order_items_set.all() 
+   
+        serializer = Order_Item_Serializer(items,many=True)
+       
+
+        return serializer.data
