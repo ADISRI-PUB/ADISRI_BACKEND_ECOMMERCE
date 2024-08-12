@@ -37,12 +37,14 @@ def addOrderItems(request):
             # Create Shipping Address
             shipping = Shipping_Address.objects.create(
                 order=order,
+
                 Address=data['shippingAddress']['address'],
                 City=data['shippingAddress']['city'],
                 PostalCode=data['shippingAddress']['postalcode'],
                 Phone_Number=data['shippingAddress']['phone'],
                 School_name=data['shippingAddress']['school'],
                 Shipping_Price=data['ShippingPrice'],
+
             )
            
             for item_data in orderItems:
@@ -81,7 +83,7 @@ def getOrderById(request, pk):
             return Response(serializer.data)
 
         else:
-            return Response({'detail': 'Not authorized'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(serializer.errors,{'detail': 'Not authorized'}, status=status.HTTP_401_UNAUTHORIZED)
 
     except Order.DoesNotExist:
         return Response({'detail': 'Order does not exist'}, status=status.HTTP_404_NOT_FOUND)
@@ -93,13 +95,14 @@ def orderall(request):
     user = request.user
     try:
         orders = Order.objects.filter(user_id=user.id)
+        if orders.count()==0:
+            return Response({'detail':'Nothing Order'},status=status.HTTP_204_NO_CONTENT)
+        
         serializer = Order_All_Serializer(orders,many=True)
-        if orders:
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
-
+        
+        return Response(serializer.data,status=status.HTTP_200_OK)
     except Exception as e:
+        print('error')
         print(e)  # Log the exception for further debugging
         return Response({'detail': 'Error fetching orders'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -108,12 +111,12 @@ def orderall(request):
 def delete_order(request,pk):
     user = request.user
     try:
-        order= Order.object.get(Order_Id=pk)
+        order= Order.objects.get(Order_Id=pk)
         order.delete()
         return Response(status =status.HTTP_204_NO_CONTENT)
     except:
         content = {'please move along': 'nothing to see here'}
-        return Response(content, status=status.HTTP_404_NOT_FOUND_)
+        return Response(content, status=status.HTTP_404_NOT_FOUND)
 
     
 
