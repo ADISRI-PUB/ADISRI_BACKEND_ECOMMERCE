@@ -20,7 +20,8 @@ class Product(models.Model):
     Class = models.CharField(max_length=20, null=True, blank=True)
     Price = models.IntegerField(null=False, blank=False)
     Image = models.ImageField(upload_to=product_image_upload_path)
-    createdAt = models.DateTimeField(auto_now_add=True)
+    Create_Date_At=models.DateField(auto_now_add=True, null=True, blank=True)
+    Create_Time_At=models.TimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return self.Name

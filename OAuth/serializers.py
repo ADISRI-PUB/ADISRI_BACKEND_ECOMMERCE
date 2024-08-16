@@ -3,13 +3,20 @@ from  django.contrib.auth.models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
+
+class UserSerializer_Deshboard(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__' 
+
 class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(read_only=True)
 
 
     class Meta:
         model = User
-        fields=['id','username','email','name']
+        fields=['id','username','email','name','password',"is_superuser","is_staff"]
 
     def get_name(self,obj):
         name = obj.first_name

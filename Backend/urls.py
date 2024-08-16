@@ -29,4 +29,11 @@ urlpatterns = [
     path('data/order/',include('Order.urls')),
     path('data/auth/', include('OAuth.urls')),
 
+    #for deshboard
+
+    path('api/product/',include('deshboard.urls_product')),
+    path('api/order/',include('deshboard.urls_order')),
+    path('api/user/',include('deshboard.urls_user')),
+    path('api/career/',include('deshboard.urls_career')),
+
 ]+ static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT) 

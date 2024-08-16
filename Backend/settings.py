@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'Careers',
     'Order',
     'OAuth',
+    'deshboard',
     #Framework
     'rest_framework',
     'rest_framework.authtoken',

@@ -14,17 +14,16 @@ from rest_framework import status
 
 @api_view(['POST'])
 def addOrderItems(request):
-    
     user = request.user
     data = request.data
-    orderItems = data['orderItems']
-   
-   
+    orderItems = data.get('orderItems')
 
-    if orderItems and len(orderItems)==0:
-        return Response({'details':'NO OrderItems'},status=status.HTTP_400_BAD_REQUEST)
+    if not orderItems:
+        return Response({'details': 'NO OrderItems'}, status=status.HTTP_400_BAD_REQUEST)
 
-    try:    # Create a new order
+    try:
+        with transaction.atomic():  # Start a transaction block
+            # Create a new order
             order = Order.objects.create(
                 user=user,
                 Tax_Price=data['TaxPrice'],
@@ -32,37 +31,31 @@ def addOrderItems(request):
                 Total_Price=data['ToatalPrice']
             )
 
-           
-
             # Create Shipping Address
             shipping = Shipping_Address.objects.create(
                 order=order,
-
                 Address=data['shippingAddress']['address'],
                 City=data['shippingAddress']['city'],
                 PostalCode=data['shippingAddress']['postalcode'],
                 Phone_Number=data['shippingAddress']['phone'],
-                School_name=data['shippingAddress']['school'],
-                Shipping_Price=data['ShippingPrice'],
-
+                School_name=data['shippingAddress'].get('school',None),
+                Shipping_Price=data['ShippingPrice']
             )
-           
+
+            # Create Order Items
             for item_data in orderItems:
                 product = Product.objects.get(Product_Id=item_data['product'])
                 
-                item=Order_Items.objects.create(
+                Order_Items.objects.create(
                     product=product,
                     order=order,
                     Name=product.Name,
                     Qty=item_data['qty'],
                     Price=item_data['price'],
-                    Image=item_data['image'],
+                    Image=item_data['image']
                 )
-            product.save()
-        
-
-            serializer=Order_Serializer(order,many=False)
             
+            serializer = Order_Serializer(order)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     except ValidationError as e:
@@ -117,6 +110,7 @@ def delete_order(request,pk):
     except:
         content = {'please move along': 'nothing to see here'}
         return Response(content, status=status.HTTP_404_NOT_FOUND)
+
 
     
 
