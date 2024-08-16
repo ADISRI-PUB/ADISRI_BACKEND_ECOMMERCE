@@ -11,3 +11,8 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = '__all__'
+
+    def to_representation(self,instance):
+        representation = super().to_representation(instance)
+        return {key : value for key , value in representation.items() if value not in[None,'',[],{}]}
+
