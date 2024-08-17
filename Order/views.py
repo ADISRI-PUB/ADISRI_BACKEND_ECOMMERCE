@@ -87,7 +87,7 @@ def getOrderById(request, pk):
 def orderall(request):
     user = request.user
     try:
-        orders = Order.objects.filter(user_id=user.id)
+        orders = Order.objects.filter(user_id=user.id).order_by('-Order_Id')
         if orders.count()==0:
             return Response({'detail':'Nothing Order'},status=status.HTTP_204_NO_CONTENT)
         
