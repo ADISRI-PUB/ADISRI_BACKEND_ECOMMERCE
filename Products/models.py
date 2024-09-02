@@ -39,7 +39,7 @@ class Book(models.Model):
     Publication = models.CharField(max_length=100, null=False, blank=False)
     Isbn = models.CharField(max_length=20, null=True, blank=True)
     Cover_Image = models.ImageField(upload_to=book_image_upload_path,null=False, blank=False)#1
-    Back_Image = models.ImageField(upload_to=book_image_upload_path,null=False , blank=False)#2
+    Back_Image = models.ImageField(upload_to=book_image_upload_path,null=True , blank=True)#2
     Index_Image = models.ImageField(upload_to=book_image_upload_path,null=True, blank=True)#3
     Page1_Image = models.ImageField(upload_to=book_image_upload_path,null=True, blank=True)
     Page2_Image = models.ImageField(upload_to=book_image_upload_path,null=True, blank=True)

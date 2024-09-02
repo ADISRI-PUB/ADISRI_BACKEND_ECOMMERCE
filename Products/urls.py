@@ -1,7 +1,9 @@
 from django.urls import path
-from .views import getProducts, getBook
+from .views import getProducts, getBook,getonetoeight
 
 urlpatterns = [
     path('product/', getProducts, name='product'),
-    path('<str:sk>/', getBook, name='book')
+    path('onetoeight/',getonetoeight, name='onetoeight'),
+    path('<str:sk>/', getBook, name='book'),
+    
 ]
