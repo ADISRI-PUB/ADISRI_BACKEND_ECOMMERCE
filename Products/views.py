@@ -23,7 +23,7 @@ def getonetoeight(request):
         products = Product.objects.filter(filters).distinct().exclude(Class__in=["Play","Nursery","Pre - Primer","Primer"]).order_by('Product_Id')
         # Pagination
         paginator =PageNumberPagination()
-        paginator.page_size =10
+        paginator.page_size =20
         paginated_products = paginator.paginate_queryset(products, request)
         
         serializer = ProductSerializer(paginated_products, many=True)
@@ -50,7 +50,7 @@ def getProducts(request):
         products = Product.objects.filter(filters).distinct().exclude(Class__in=[1,2,3,4,5]).order_by('Product_Id')
          # Pagination
         paginator = PageNumberPagination()
-        paginator.page_size = 10  # You can set this to a different value or configure globally
+        paginator.page_size = 20 # You can set this to a different value or configure globally
         paginated_products = paginator.paginate_queryset(products, request)
 
         serializer = ProductSerializer(paginated_products, many=True)
