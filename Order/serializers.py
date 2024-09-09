@@ -22,12 +22,14 @@ class Order_Serializer(serializers.ModelSerializer):
     orderItems = serializers.SerializerMethodField(read_only=True)
     shippingAddress = serializers.SerializerMethodField(read_only=True)
     user = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Order
         fields ='__all__'
 
     def get_orderItems(self,obj):
         items=obj.order_items_set.all() 
+        
    
         serializer = Order_Item_Serializer(items,many=True)
        
