@@ -10,6 +10,9 @@ def product_image_upload_path(instance, filename):
 def book_image_upload_path(instance, filename):
     book_name = slugify(instance.Name)
     return os.path.join('Books', book_name, filename)
+def pamplate_image_upload_path(instance, filename):
+    book_name = slugify(instance.Name)
+    return os.path.join('Pamplates', book_name, filename)
 
 
 class Product(models.Model):
@@ -63,6 +66,27 @@ class Book(models.Model):
 
     def __str__(self):
         return self.Name
+
+
+class Pamplates(models.Model):
+    Name = models.CharField(max_length=50,null=False, blank=False)
+    Description = models.TextField(null=True, blank=True)
+    Pamplates_Id = models.AutoField(primary_key=True)
+    Pamplates_Image = models.ImageField(upload_to=pamplate_image_upload_path,null=False, blank=False)
+    Product_1 = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, related_name='pamplates_product_1')
+    Product_2 = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, related_name='pamplates_product_2')
+    Product_3 = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, related_name='pamplates_product_3')
+    Product_4 = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, related_name='pamplates_product_4')
+    Product_5 = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, related_name='pamplates_product_5')
+    Product_6 = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, related_name='pamplates_product_6')
+    Product_7 = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, related_name='pamplates_product_7')
+    Product_8 = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, related_name='pamplates_product_8')
+    Product_9 = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, related_name='pamplates_product_9')
+
+    def __str__(self):
+        return self.Name
+
+
 
 
 
