@@ -12,8 +12,6 @@ from django.contrib.auth.hashers import make_password
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer): 
     def validate(self, attrs):
         data = super().validate(attrs)
-        print(data)
-        # Add custom claims to the response data
         serializer =UserSerializerWithToken(self.user).data
         for k,v in serializer.items():
             data[k]= v

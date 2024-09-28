@@ -6,8 +6,6 @@ from .serializers import Carrer_Job_Serializer
 
 
 
-
-# Create your views here.
 @api_view(['GET'])
 def getCarrers(request):
     carrer=Carrer_Job.objects.all()

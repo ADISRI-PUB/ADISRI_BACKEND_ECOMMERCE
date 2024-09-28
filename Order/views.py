@@ -22,8 +22,7 @@ def addOrderItems(request):
         return Response({'details': 'NO OrderItems'}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
-        with transaction.atomic():  # Start a transaction block
-            # Create a new order
+        with transaction.atomic():  
             order = Order.objects.create(
                 user=user,
                 Tax_Price=data['TaxPrice'],
@@ -31,7 +30,6 @@ def addOrderItems(request):
                 Total_Price=data['ToatalPrice']
             )
 
-            # Create Shipping Address
             shipping = Shipping_Address.objects.create(
                 order=order,
                 Address=data['shippingAddress']['address'],
@@ -42,7 +40,7 @@ def addOrderItems(request):
                 Shipping_Price=data['ShippingPrice']
             )
 
-            # Create Order Items
+
             for item_data in orderItems:
                 product = Product.objects.get(Product_Id=item_data['product'])
                 
@@ -96,7 +94,7 @@ def orderall(request):
         return Response(serializer.data,status=status.HTTP_200_OK)
     except Exception as e:
         print('error')
-        print(e)  # Log the exception for further debugging
+        print(e)
         return Response({'detail': 'Error fetching orders'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

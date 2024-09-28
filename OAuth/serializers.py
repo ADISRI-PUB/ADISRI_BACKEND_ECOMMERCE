@@ -13,7 +13,6 @@ class UserSerializer_Deshboard(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(read_only=True)
 
-
     class Meta:
         model = User
         fields=['id','username','email','name','password',"is_superuser","is_staff"]
@@ -37,10 +36,11 @@ class UserSerializerWithToken(UserSerializer):
         token= RefreshToken.for_user(obj)
         return str(token.access_token)
 
+        
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
-        # Add custom claims to the response data
         data['username'] = self.user.username
         data['message'] = 'hello world'
         print(self.user.username)
