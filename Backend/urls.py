@@ -30,7 +30,6 @@ urlpatterns = [
     path('data/auth/', include('OAuth.urls')),
 
     #for deshboard
-
     path('api/product/',include('deshboard.urls_product')),
     path('api/order/',include('deshboard.urls_order')),
     path('api/user/',include('deshboard.urls_user')),

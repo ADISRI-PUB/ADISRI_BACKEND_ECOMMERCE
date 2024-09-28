@@ -29,11 +29,7 @@ class Order_Serializer(serializers.ModelSerializer):
 
     def get_orderItems(self,obj):
         items=obj.order_items_set.all() 
-        
-   
         serializer = Order_Item_Serializer(items,many=True)
-       
-
         return serializer.data
 
     def get_shippingAddress(self,obj):
@@ -58,8 +54,5 @@ class Order_All_Serializer(serializers.ModelSerializer):
     
     def get_orderItems(self,obj):
         items=obj.order_items_set.all() 
-   
         serializer = Order_Item_Serializer(items,many=True)
-       
-
         return serializer.data
